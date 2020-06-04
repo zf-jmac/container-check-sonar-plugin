@@ -12,6 +12,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Analysis {
 
     /**
@@ -25,7 +26,6 @@ public class Analysis {
     private final List<Vulnerability> vulnerabilities;
 
     @JsonCreator
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public Analysis(
         @JsonProperty(value = "Target", required = true) final String target,
         @JsonProperty(value = "Vulnerabilities") final List<Vulnerability> vulnerabilities) {
