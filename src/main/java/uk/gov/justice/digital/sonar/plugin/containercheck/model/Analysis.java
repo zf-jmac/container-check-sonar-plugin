@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.sonar.plugin.containercheck.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,7 @@ public class Analysis {
     private final List<Vulnerability> vulnerabilities;
 
     @JsonCreator
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public Analysis(
         @JsonProperty(value = "Target", required = true) final String target,
         @JsonProperty(value = "Vulnerabilities") final List<Vulnerability> vulnerabilities) {
