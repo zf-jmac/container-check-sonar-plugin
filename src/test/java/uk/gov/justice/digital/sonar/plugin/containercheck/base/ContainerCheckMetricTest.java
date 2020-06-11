@@ -10,6 +10,7 @@ import static uk.gov.justice.digital.sonar.plugin.containercheck.base.ContainerC
 import static uk.gov.justice.digital.sonar.plugin.containercheck.base.ContainerCheckMetrics.TOTAL_VULNERABILITIES_KEY;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,35 +69,38 @@ class ContainerCheckMetricTest {
         assertEquals(198, containerCheckMetric.getVulnerabilityCount());
     }
 
-    // @DisplayName("Tests the save operation.")
-    // @Test
-    // void testSaveMeasures() {
-    //     final SensorContextTester sensorContext = SensorContextTester.create(new File("."));
-    //     when(inputComponent.key()).thenReturn("IN-KEY");
-    //     containerCheckMetric.incrementCount(Severity.CRITICAL);
-    //     containerCheckMetric.incrementCount(Severity.MAJOR);
-    //     containerCheckMetric.incrementCount(Severity.CRITICAL);
-    //     containerCheckMetric.incrementCount(Severity.BLOCKER);
-    //     containerCheckMetric.incrementCount(Severity.MINOR);
-    //     containerCheckMetric.incrementCount(Severity.MINOR);
-    //     containerCheckMetric.incrementCount(Severity.INFO);
-    //     containerCheckMetric.incrementCount(Severity.INFO);
-    //     containerCheckMetric.incrementCount(Severity.INFO);
-    //     containerCheckMetric.increaseVulnerabilityCount(9);
+    @DisplayName("Tests the save operation.")
+    @Test
+    void testSaveMeasures() {
+        final SensorContextTester sensorContext = SensorContextTester.create(new File("."));
+        when(inputComponent.key()).thenReturn("IN-KEY");
+        containerCheckMetric.incrementCount(Severity.CRITICAL);
+        containerCheckMetric.incrementCount(Severity.MAJOR);
+        containerCheckMetric.incrementCount(Severity.CRITICAL);
+        containerCheckMetric.incrementCount(Severity.BLOCKER);
+        containerCheckMetric.incrementCount(Severity.MINOR);
+        containerCheckMetric.incrementCount(Severity.MINOR);
+        containerCheckMetric.incrementCount(Severity.INFO);
+        containerCheckMetric.incrementCount(Severity.INFO);
+        containerCheckMetric.incrementCount(Severity.INFO);
+        containerCheckMetric.increaseVulnerabilityCount(9);
 
-    //     // Act
-    //     containerCheckMetric.saveMeasures(sensorContext);
-    //     //
-    //     final Map<String, Integer> expectedMap = Map.of(CRITICAL_SEVERITY_VULNS_KEY, Integer.valueOf(3), // 2 CRITICAL + 1 BLOCKER
-    //                                                     HIGH_SEVERITY_VULNS_KEY, Integer.valueOf(1), // 1 MAJOR
-    //                                                     MEDIUM_SEVERITY_VULNS_KEY, Integer.valueOf(2), // 2 MINOR
-    //                                                     LOW_SEVERITY_VULNS_KEY, Integer.valueOf(3), // 3 INFO
-    //                                                     TOTAL_VULNERABILITIES_KEY, Integer.valueOf(9));
-    //     for (Map.Entry<String, Integer> entry : expectedMap.entrySet()) {
-    //         final Measure<Integer> measure = sensorContext.measure("IN-KEY", entry.getKey());
-    //         assertEquals(entry.getValue().intValue(), measure.value().intValue(), entry.getKey());
-    //     }
-    // }
+        // Act
+        containerCheckMetric.saveMeasures(sensorContext);
+        final HashMap<String, Integer> expectedMap = new HashMap<String, Integer>() {
+            {
+                put(CRITICAL_SEVERITY_VULNS_KEY, Integer.valueOf(3)); // 2 CRITICAL + 1 BLOCKER
+                put(HIGH_SEVERITY_VULNS_KEY, Integer.valueOf(1)); // 1 MAJOR
+                put(MEDIUM_SEVERITY_VULNS_KEY, Integer.valueOf(2)); // 2 MINOR
+                put(LOW_SEVERITY_VULNS_KEY, Integer.valueOf(3)); // 3 INFO
+                put(TOTAL_VULNERABILITIES_KEY, Integer.valueOf(9));
+            }
+        };
+        for (Map.Entry<String, Integer> entry : expectedMap.entrySet()) {
+            final Measure<Integer> measure = sensorContext.measure("IN-KEY", entry.getKey());
+            assertEquals(entry.getValue().intValue(), measure.value().intValue(), entry.getKey());
+        }
+    }
 
     @DisplayName("Increment the general vulnerability counter")
     @Test
